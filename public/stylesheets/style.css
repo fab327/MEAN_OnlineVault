@@ -1,0 +1,52 @@
+@media (max-width: 600px) {
+  .glyphiconMargin {
+    margin-top:10px;
+  }
+}
+
+body {
+  padding: 50px;
+  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
+}
+
+a {
+  color: #00B7FF;
+}
+
+.docTitle {
+  font-size:20px; margin-left: 10px;
+}
+
+.topMarginIndent {
+  margin-top:30px;
+}
+
+.glyphiconMargin {
+  margin-top:10px;
+  margin-left: 15px;
+}
+
+/* Animation */
+.animate-show {
+  line-height: 20px;
+  opacity: 1;
+  padding: 10px;
+  background: white;
+}
+
+.animate-show.ng-hide-add.ng-hide-add-active,
+.animate-show.ng-hide-remove.ng-hide-remove-active {
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+}
+
+.animate-show.ng-hide {
+  line-height: 0;
+  opacity: 0;
+  padding: 0 10px;
+}
+
+.check-element {
+  padding: 10px;
+  background: white;
+}

@@ -1,0 +1,253 @@
+<html>
+<head>
+    <title>Online Vault</title>
+    <link href="/public/stylesheets/style.css" rel="stylesheet">
+    <link href="/public/stylesheets/bootstrap.css" rel="stylesheet">
+    <link href="/public/stylesheets/bootstrap-theme.css" rel="stylesheet">
+
+    <script src="/public/javascripts/angular.js"></script>
+    <script src="/public/javascripts/angular-animate.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/lodash/lodash.js"></script>
+    <script src="/bower_components/ng-password-strength/dist/scripts/ng-password-strength.js"></script>
+    <script src="/public/javascripts/angularApp.js"></script>
+    <script src="/public/javascripts/bootstrap.js"></script>
+
+</head>
+<body ng-app="onlineVault" ng-controller="MainCtrl">
+
+<nav class="navbar navbar-default pull-right" ng-controller="NavCtrl">
+    <ul class="nav navbar-nav">
+        <li ng-show="isLoggedIn()"><a>{{ currentUser() }}</a></li>
+        <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Log Out</a></li>
+        <li ng-hide="isLoggedIn()"><a href="/#/login">Log In</a></li>
+        <li ng-hide="isLoggedIn()"><a href="/#/register">Register</a></li>
+    </ul>
+</nav>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+
+        <ui-view></ui-view>
+
+    </div>
+</div>
+
+<!-- Home template -->
+<script type="text/ng-template" id="/home.html">
+    <div class="page-header">
+        <h1><a href="/#/home.html">Online Vault</a></h1>
+    </div>
+
+    <div ng-hide="isLoggedIn()">
+        <div class="jumbotron">
+            <div class="container">
+                <h1>CS6040 Project</h1>
+                <p>The instructions go here...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion" id="documents" ng-repeat="doc in docs | orderBy: '-documentType'" ng-show="isLoggedIn()">
+
+        <!--TODO: Find a cleaner way to filter documents in the controller-->
+        <div ng-show="doc.author == getCurrentUser()">
+
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <h3><a class="accordion-toggle label label-warning" data-toggle="collapse" data-parent="#documents" href="#{{doc._id}}" ng-show="doc.title">
+                        {{doc.title}}
+                    </a></h3>
+                </div>
+                <div id="{{doc._id}}" class="accordion-body collapse in well" ng-show="doc.content">
+                    <div class="accordion-inner">
+                        <blockquote>
+                            {{doc.content}}
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="accordion-heading">
+                    <h3><a class="accordion-toggle label label-danger" data-toggle="collapse" data-parent="#credentials" href="#{{doc.websiteName}}" ng-show="doc.websiteName">
+                        {{doc.websiteName}}
+                    </a></h3>
+                </div>
+                <div id="{{doc.websiteName}}" class="accordion-body collapse in well" ng-show="doc.username">
+                    <div class="accordion-inner">
+                        <div ng-hide="tempDocIds[doc._id]">
+                            ********
+                        </div>
+                        <div ng-show="tempDocIds[doc._id]">
+                            <div ng-show="doc.websiteUrl">
+                                <label>URL: </label> <a href="http://{{doc.websiteUrl}}">{{doc.websiteUrl}}</a>
+                            </div>
+                            <div>
+                                <label>Username: </label> {{doc.username}}
+                            </div>
+                            <div>
+                                <label>Password: </label> {{doc.password}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+        </div>
+
+    </div>
+
+    <form ng-submit="addDoc()" ng-show="isLoggedIn()" class="topMarginIndent">
+        <div ng-hide="isLoggedIn()">
+            <h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can add a
+                document.</h3>
+        </div>
+
+        <label for="document"><h3 class="text-warning">Document</h3></label>
+        <input id="document" type="radio" name="docType" ng-model="documentType" value="document">
+        <br/>
+        <label for="credentials"><h3 class="text-danger">Credentials</h3></label>
+        <input id="credentials" type="radio" name="docType" ng-model="documentType" value="credentials">
+
+        <div class="sample-show-hide" ng-show="documentType == 'document'">
+            <h3>Add a new secured document</h3>
+
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Title" ng-model="title">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" placeholder="Content" ng-model="content"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-lg pull-right">Add</button>
+        </div>
+
+        <div ng-show="documentType == 'credentials'">
+            <h3>Save a website credentials</h3>
+
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Website name (no space)" ng-model="websiteName">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Website url (optional)" ng-model="websiteUrl">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Username" ng-model="username">
+            </div>
+            <div class="row">
+                <div class="col-xs-11">
+                    <input type="text" class="form-control pull-left" placeholder="Password" ng-show="passwordVisible" ng-model="password">
+                    <input type="password" class="form-control pull-left" placeholder="Password" ng-hide="passwordVisible" ng-model="password">
+                </div>
+                <span class="glyphicon glyphicon-eye-open glyphiconMargin" ng-click="showHidePassword()"></span>
+            </div>
+            <br>
+            <div ng-password-strength="password" strength="passStrength" inner-class="progress-bar progress-bar-striped active" inner-class-prefix="progress-bar-"></div>
+
+            <!--Password Generator-->
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="characters.az">
+                    a-z
+                </label>
+                <label>
+                    <input type="checkbox" ng-model="characters.AZ">
+                    A-Z
+                </label>
+                <label>
+                    <input type="checkbox" ng-model="characters.numbers">
+                    0-9
+                </label>
+                <label>
+                    <input type="checkbox" ng-model="characters.specials">
+                    !$%@#
+                </label>
+
+                <span>
+                    <button class="btn btn-info" ng-click="generatePassword()">Generate Password</button>
+                </span>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-lg pull-right">Add</button>
+        </div>
+
+    </form>
+</script>
+
+<!-- Document template -->
+<script type="text/ng-template" id="/docs.html">
+    <div class="page-header">
+        <h3>
+            {{doc.title}}
+        </h3>
+    </div>
+</script>
+
+<!-- Registration template -->
+<script type="text/ng-template" id="/register.html">
+    <div class="page-header">
+        <h1><a href="/#/home.html">Online Vault</a></h1>
+    </div>
+
+    <div ng-show="error" class="alert alert-danger row">
+        <span>{{ error.message }}</span>
+    </div>
+
+    <form ng-submit="register()" class="topMarginIndent">
+        <h3>Register</h3>
+
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Username" ng-model="user.username">
+        </div>
+
+        <div class="row">
+            <div class="col-xs-11">
+                <input type="text" class="form-control pull-left" placeholder="Password" ng-show="passwordVisible" ng-model="user.password">
+                <input type="password" class="form-control pull-left" placeholder="Password" ng-hide="passwordVisible" ng-model="user.password">
+            </div>
+            <span class="glyphicon glyphicon-eye-open glyphiconMargin" ng-click="showHidePassword()"></span>
+        </div>
+
+        <br>
+
+        <div ng-password-strength="user.password" strength="passStrength" inner-class="progress-bar progress-bar-striped active" inner-class-prefix="progress-bar-"></div>
+
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+
+</script>
+
+<!-- Login template -->
+<script type="text/ng-template" id="/login.html">
+    <div class="page-header">
+        <h1><a href="/#/home.html">Online Vault</a></h1>
+    </div>
+
+    <div ng-show="error" class="alert alert-danger row">
+        <span>{{error.message}}</span>
+    </div>
+
+    <form ng-submit="logIn()" class="topMarginIndent">
+        <h3>Log In</h3>
+
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Username" ng-model="user.username">
+        </div>
+
+        <div class="row">
+            <div class="col-xs-11">
+                <input type="text" class="form-control pull-left" placeholder="Password" ng-show="passwordVisible" ng-model="user.password">
+                <input type="password" class="form-control pull-left" placeholder="Password" ng-hide="passwordVisible" ng-model="user.password">
+            </div>
+            <span class="glyphicon glyphicon-eye-open glyphiconMargin" ng-click="showHidePassword()"></span>
+        </div>
+
+        <br>
+
+        <button type="submit" class="btn btn-primary">Log In</button>
+    </form>
+</script>
+
+</body>
+</html>
