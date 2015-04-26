@@ -39,8 +39,13 @@ app.use('/bower_components', express.static(path.join(__dirname, '/bower_compone
 app.use('/', routes);
 app.use('/users', users);
 
-//mongoose.connect('mongodb://localhost/vault');
-mongoose.connect('mongodb://heroku_app36265103:n2KwTdSq6DkGM89w@ds063809.mongolab.com:63809/heroku_app36265103');
+var uristring =
+    process.env.MONGOLAB_URI ||
+    process.env.MONGOHQ_URL ||
+    'mongodb://localhost/vault';
+
+mongoose.connect(uristring);
+//mongoose.connect('mongodb://heroku_app36265103:n2KwTdSq6DkGM89w@ds063809.mongolab.com:63809/heroku_app36265103');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
