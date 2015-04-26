@@ -40,7 +40,7 @@ app.use('/', routes);
 app.use('/users', users);
 
 //mongoose.connect('mongodb://localhost/vault');
-mongoose.connect(' mongodb://Onlinevault:onl1nevault@ds063809.mongolab.com:63809/heroku_app36265103');
+mongoose.connect('mongodb://marcelstaro@gmail.com:n2KwTdSq6DkGM89w@ds063809.mongolab.com:63809/heroku_app36265103');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
