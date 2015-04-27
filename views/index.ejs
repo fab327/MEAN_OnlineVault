@@ -54,6 +54,8 @@
         <!--TODO: Find a cleaner way to filter documents in the controller-->
         <div ng-show="doc.author == getCurrentUser()">
 
+            <i class="glyphicon glyphicon-lock pull-right" ng-click="showHideDocument(doc._id)"></i>
+
             <div class="accordion-group">
                 <div class="accordion-heading">
                     <h3><a class="accordion-toggle label label-warning" data-toggle="collapse" data-parent="#documents" href="#{{doc._id}}" ng-show="doc.title">
@@ -62,9 +64,14 @@
                 </div>
                 <div id="{{doc._id}}" class="accordion-body collapse in well" ng-show="doc.content">
                     <div class="accordion-inner">
-                        <blockquote>
-                            {{doc.content}}
-                        </blockquote>
+                        <div ng-hide="tempDocIds[doc._id]">
+                            ********
+                        </div>
+                        <div ng-show="tempDocIds[doc._id]">
+                            <blockquote>
+                                {{doc.content}}
+                            </blockquote>
+                        </div>
                     </div>
                 </div>
                 <div class="accordion-heading">

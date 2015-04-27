@@ -45,7 +45,6 @@ var uristring =
     'mongodb://localhost/vault';
 
 mongoose.connect(uristring);
-//mongoose.connect('mongodb://heroku_app36265103:n2KwTdSq6DkGM89w@ds063809.mongolab.com:63809/heroku_app36265103');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -77,6 +76,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

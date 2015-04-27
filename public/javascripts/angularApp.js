@@ -138,11 +138,14 @@ app.controller('MainCtrl', [
     'docs',
     'auth',
     function ($scope, docs, auth) {
-        $scope.test = 'Hello world';
+
+        var tempDocIds = [];
+
         $scope.passwordVisible = false;
         $scope.docs = docs.docs;
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.getCurrentUser = auth.currentUser;
+        $scope.tempDocIds = tempDocIds;
         $scope.addDoc = function () {
             if ($scope.documentType == 'document') {
                 if (!$scope.title || $scope.title === '') {
