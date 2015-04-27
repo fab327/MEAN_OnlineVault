@@ -26,6 +26,10 @@ a {
   margin-left: 15px;
 }
 
+.passwordInputField {
+  margin-top:22px;
+}
+
 /* Animation */
 .animate-show {
   line-height: 20px;

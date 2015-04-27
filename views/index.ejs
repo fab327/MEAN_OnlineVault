@@ -40,10 +40,13 @@
 <!-- Home template -->
 <script type="text/ng-template" id="/home.html">
     <div class="page-header">
-        <h1><a href="/#/home.html">Online Vault</a></h1>
 
-        <div class="row" ng-show="isLoggedIn()">
-            <div class="col-xs-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h1><a href="/#/home.html">Online Vault</a></h1>
+            </div>
+
+            <div ng-show="isLoggedIn()" class="col-md-6 passwordInputField">
                 <input type="password" class="form-control" placeholder="Type in password to unlock document"
                        ng-model="passwordInput">
             </div>
@@ -64,6 +67,11 @@
                     <li>Login and create new documents or store website credentials</li>
                     <li>Use the password generator to randomly generate one if needed</li>
                     <li>Your documents and or notes will not show until your master password</li>
+                </ul>
+                <p>Authors:</p>
+                <ul>
+                    <li><a href="https://www.linkedin.com/in/fab327" target="_blank">Fabrice Ahebee</a></li>
+                    <li>Marcel Starosielsky - marcelstaro@gmail.com</li>
                 </ul>
             </div>
         </div>
