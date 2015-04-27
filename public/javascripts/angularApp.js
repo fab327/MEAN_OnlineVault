@@ -17,16 +17,16 @@ app.config([
                     }]
                 }
             })
-            .state('docs', {
-                url: '/docs/{id}',
-                templateUrl: '/docs.html',
-                controller: 'DocsCtrl',
-                resolve: {
-                    post: ['$stateParams', 'docs', function ($stateParams, docs) {
-                        return docs.get($stateParams.id);
-                    }]
-                }
-            })
+            //.state('docs', {
+            //    url: '/docs/{id}',
+            //    templateUrl: '/docs.html',
+            //    controller: 'DocsCtrl',
+            //    resolve: {
+            //        post: ['$stateParams', 'docs', function ($stateParams, docs) {
+            //            return docs.get($stateParams.id);
+            //        }]
+            //    }
+            //})
             .state('login', {
                 url: '/login',
                 templateUrl: '/login.html',
@@ -83,6 +83,13 @@ app.factory('auth', ['$http', '$window', function ($http, $window) {
 
             return payload.username;
         }
+    };
+
+    auth.validatePassword = function(userInput) {
+        return $http.get('/validate/' + userInput + "_" + auth.currentUser())
+            .success(function (data) {
+                return data;
+        });
     };
 
     auth.register = function (user) {
@@ -146,6 +153,7 @@ app.controller('MainCtrl', [
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.getCurrentUser = auth.currentUser;
         $scope.tempDocIds = tempDocIds;
+
         $scope.addDoc = function () {
             if ($scope.documentType == 'document') {
                 if (!$scope.title || $scope.title === '') {
@@ -224,13 +232,21 @@ app.controller('MainCtrl', [
             $scope.passwordVisible = !$scope.passwordVisible;
         }
 
-        $scope.showHideDocument = function(docId) {
-            if (tempDocIds[docId]) {
-                var currentStatus = tempDocIds[docId];
-                tempDocIds[docId] = !currentStatus;
-            } else {
-                tempDocIds[docId] = true;
-            }
+        $scope.showHideDocument = function(passwordInput, docId) {
+            auth.validatePassword(passwordInput)
+                .then(function (res) {
+                    if (res.data === true) {
+                        if (tempDocIds[docId]) {
+                            var currentStatus = tempDocIds[docId];
+                            tempDocIds[docId] = !currentStatus;
+                        } else {
+                            tempDocIds[docId] = true;
+                        }
+                    } else {
+
+                    }
+                }
+            );
         }
 
     }

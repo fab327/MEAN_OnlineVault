@@ -55,6 +55,24 @@ router.post('/docs', auth, function (req, res, next) {
     });
 });
 
+router.get('/validate/:input', function (req, res, next) {
+    var userInput = req.url.replace("/validate/", "");
+    userInput = userInput.split("_");
+
+    User.findOne({username: userInput[1]}, function(err, user) {
+        if (user) {
+            if (user.validPassword(userInput[0]))
+                res.json(true);
+            else
+                res.json(false);
+        } else {
+            return res.status(400).json({message: 'An internal error occurred'});
+        }
+    });
+
+
+});
+
 //router.get('/docs/:doc', function (req, res) {
 //
 //    req.post.populate('comments', function (err, doc) {
