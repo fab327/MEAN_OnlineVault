@@ -47,7 +47,7 @@
             </div>
 
             <div ng-show="isLoggedIn()" class="col-md-6 passwordInputField">
-                <input type="password" class="form-control" placeholder="Type in password to unlock document"
+                <input type="password" class="form-control" placeholder="Type in password to unlock document(s)"
                        ng-model="passwordInput">
             </div>
         </div>
@@ -60,14 +60,16 @@
                 <p>This project is a proof of concept of password and documents managers such as
                     <a href="https://lastpass.com/" target="_blank">LastPass</a> or
                     <a href="https://agilebits.com/onepassword" target="_blank">1Password</a></p>
-                <p>The goal is to only have to remember one password</p>
-                <p>As a user you get to:</p>
+                <p>The goal is to only have to remember one password and store other credentials</p>
+                <strong>Instructions:</strong>
                 <ul>
                     <li>Register an account and see your password strength</li>
                     <li>Login and create new documents or store website credentials</li>
                     <li>Use the password generator to randomly generate one if needed</li>
-                    <li>Your documents and or notes will not show until your master password</li>
+                    <li>Your documents and or notes will not be readable until your master password is entered at the top right corner</li>
                 </ul>
+                <strong>Please note that the master password is stored securely but the documents are stored as plain
+                    text due to a restrained period of time of implementation</strong>
                 <p>Authors:</p>
                 <ul>
                     <li><a href="https://www.linkedin.com/in/fab327" target="_blank">Fabrice Ahebee</a></li>
