@@ -1,6 +1,6 @@
 # README #
 
-Welcome to Online Vault. A smaller scale LastPass implementation.
+Welcome to Online Vault. A smaller scale LastPass implementation accessible at https://online-vault.herokuapp.com/
 
 ### How do I get set up? ###
 
