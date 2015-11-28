@@ -16,5 +16,5 @@ Welcome to Online Vault. A smaller scale LastPass implementation accessible at h
 
 ### Who do I talk to? ###
 
-* Fabrice Ahebee jahebee@students.kennesaw.edu
+* Fabrice Ahebee fab@justfabcodes.com
 * Marcel Starosielsky mstarosi@students.kennesaw.edu
